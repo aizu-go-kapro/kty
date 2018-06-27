@@ -25,12 +25,12 @@ func New()*Slack{
   }
 }
 
-func (s *Slack)Send(token, message string)error{
+func (s *Slack)Send(token map[string]string, message string)error{
 
   message := &Message {
-    token,
+    token["slackChannelID"],
 		message,
-    true,
+		true,
   }
   m,err:= json.Marshal(message)
 
