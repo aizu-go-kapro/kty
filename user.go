@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	"github.com/aizu-go-kapro/kty/slack"
 )
 
 type User struct {
@@ -11,7 +12,20 @@ type User struct {
 	Service map[ServiceID]Conf
 }
 
+func NewUser(name string, sc map[ServiceID]Conf)*User{
+	return &User{
+		Name: name,
+		Service: sc,
+	}
+}
+
+var servises = map[string]Service{
+	"slack": &slack.Slack{},
+}
+
 type Conf map[string]string
+
+
 
 func (u *User) Send(sid ServiceID, message string) error {
 	const errtag = "User.Send failed "
@@ -19,13 +33,13 @@ func (u *User) Send(sid ServiceID, message string) error {
 	if !ok {
 		return errors.Wrap(errors.New("not found service"), errtag)
 	}
-	fmt.Println(conf)
-	//
-	//s := GetService(sid)
-	//
-	//if err := s.Send(conf, message); err != nil {
-	//	return errors.Wrap(err, errtag)
-	//}
+
+	s := GetService(sid)
+	cf := map[string]string(conf)
+
+	if err := s.Send(cf, message); err != nil {
+		return errors.Wrap(err, errtag)
+	}
 
 	return nil
 }
@@ -41,4 +55,12 @@ func (u *User) SendAll(message string) error {
 	}
 
 	return nil
+}
+
+func GetService(sid ServiceID) Service {
+	switch sid {
+	case SlackID:
+		return slack.New()
+	}
+	panic("not found")
 }
