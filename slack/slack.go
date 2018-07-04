@@ -37,6 +37,9 @@ func (s *Slack) Send(token map[string]string, message string) error {
 	}
 
 	m, err := json.Marshal(ms)
+	if err != nil {
+		return err
+	}
 
 	body := bytes.NewReader(m)
 	req, err := http.NewRequest("POST", "https://slack.com/api/chat.postMessage", body)
