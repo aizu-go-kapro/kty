@@ -14,6 +14,11 @@ type User struct {
 	Service map[service.ServiceID]Conf
 }
 
+type MasterUser struct {
+	SlackTeamName string `json:"slack_team_name"`
+	TwitterID     string `json:"twitter_id"`
+}
+
 func NewUser(name string) *User {
 	return &User{
 		Name:    name,
