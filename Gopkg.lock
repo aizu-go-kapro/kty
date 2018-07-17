@@ -8,12 +8,6 @@
   version = "v2.0.0"
 
 [[projects]]
-  name = "github.com/coreos/pkg"
-  packages = ["flagutil"]
-  revision = "3ac0863d7acf3bc44daf49afef8919af12f704ef"
-  version = "v3"
-
-[[projects]]
   branch = "master"
   name = "github.com/dghubble/go-twitter"
   packages = ["twitter"]
@@ -52,6 +46,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "28cd1b49532c21df6ce102e2bcc4ebaa1855f064376313af429a792fa93762c4"
+  inputs-digest = "c484fd0e1a965862bcaed493e5b28f01173d5248c249251ebf63161a81f3835f"
   solver-name = "gps-cdcl"
   solver-version = 1
