@@ -19,6 +19,11 @@ type MasterUser struct {
 	TwitterID     string `json:"twitter_id"`
 }
 
+type JsonUser struct {
+	SlackChannelID string `json:"slack_channel_id"`
+	TwitterID      string `json:"twitter_id"`
+}
+
 func NewUser(name string) *User {
 	return &User{
 		Name:    name,
