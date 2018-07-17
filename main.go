@@ -1,16 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/aizu-go-kapro/kty/service"
+	"github.com/aizu-go-kapro/kty/user"
+)
 
 func main() {
-	c := Conf{
-		"slackChannelID": "DA8FGSVUH",
+	c := user.Conf{
+		"slackChannelID": "GBSL4FV9V",
 	}
-	sc := map[ServiceID]Conf{
-		SlackID: c,
+	sc := map[service.ServiceID]user.Conf{
+		service.SlackID: c,
 	}
-	u := NewUser("yusuke", sc)
-	if err := u.Send(SlackID, "タコ助"); err != nil {
+
+	u := user.NewUser("yusuke", sc)
+
+	if err := u.Send(service.SlackID, "タコ助"); err != nil {
 		fmt.Println(err)
 	}
 }

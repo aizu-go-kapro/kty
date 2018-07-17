@@ -1,9 +1,10 @@
-package main
+package service
 
 type ServiceID string
 
 const (
 	SlackID ServiceID = "slack"
+	TwitterID ServiceID = "twitter"
 )
 
 

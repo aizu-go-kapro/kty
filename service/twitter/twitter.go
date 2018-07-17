@@ -11,7 +11,7 @@ type Twitter struct {
 	client *twitter.Client
 }
 
-func NewClient() *Twitter {
+func New() *Twitter {
 
 	consumerKey := os.Getenv("TWITTER_CONSUMER_KEY")
 	consumerSecret := os.Getenv("TWITTER_CONSUMER_SECRET")
@@ -33,13 +33,17 @@ func NewClient() *Twitter {
 	}
 }
 
-func (t *Twitter) Send(user map[string]string, message string) error {
+func (t *Twitter) Send(token map[string]string, message string) error {
 
 	params := &twitter.DirectMessageNewParams{
-		ScreenName: user["recipient"],
+		ScreenName: token["recipient"],
 		Text:       message,
 	}
 	_, _, err := t.client.DirectMessages.New(params)
 
 	return err
+}
+
+func (t *Twitter)TypeID() string {
+	return "twitter"
 }
