@@ -8,6 +8,10 @@ import (
 	"os"
 )
 
+const (
+	TokenKey = "slackChannelID"
+)
+
 type Message struct {
 	Channel string `json:"channel"`
 	Text    string `json:"text"`
@@ -31,7 +35,7 @@ func (s *Slack) TypeID() string {
 func (s *Slack) Send(token map[string]string, message string) error {
 
 	ms := &Message{
-		Channel: token["slackChannelID"],
+		Channel: token[TokenKey],
 		Text:    message,
 		AsUser:  true,
 	}
@@ -57,4 +61,8 @@ func (s *Slack) Send(token map[string]string, message string) error {
 	defer resp.Body.Close()
 
 	return nil
+}
+
+func (s *Slack)TokenKey() string {
+	return TokenKey
 }

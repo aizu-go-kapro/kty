@@ -7,14 +7,9 @@ import (
 )
 
 func main() {
-	c := user.Conf{
-		"slackChannelID": "GBSL4FV9V",
-	}
-	sc := map[service.ServiceID]user.Conf{
-		service.SlackID: c,
-	}
+	u := user.NewUser("yusuke")
 
-	u := user.NewUser("yusuke", sc)
+	u.AddService(service.SlackID, "GBSL4FV9V")
 
 	if err := u.Send(service.SlackID, "タコ助"); err != nil {
 		fmt.Println(err)

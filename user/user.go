@@ -3,10 +3,10 @@ package user
 import (
 	"fmt"
 
-	"github.com/pkg/errors"
-	"github.com/aizu-go-kapro/kty/service/slack"
 	"github.com/aizu-go-kapro/kty/service"
+	"github.com/aizu-go-kapro/kty/service/slack"
 	"github.com/aizu-go-kapro/kty/service/twitter"
+	"github.com/pkg/errors"
 )
 
 type User struct {
@@ -14,20 +14,14 @@ type User struct {
 	Service map[service.ServiceID]Conf
 }
 
-func NewUser(name string, sc map[service.ServiceID]Conf)*User{
+func NewUser(name string) *User {
 	return &User{
-		Name: name,
-		Service: sc,
+		Name:    name,
+		Service: map[service.ServiceID]Conf{},
 	}
 }
 
-var servises = map[string]service.Service{
-	"slack": &slack.Slack{},
-	"twitter": &twitter.Twitter{},
-}
-
 type Conf map[string]string
-
 
 func (u *User) Send(sid service.ServiceID, message string) error {
 	const errtag = "User.Send failed "
@@ -57,6 +51,21 @@ func (u *User) SendAll(message string) error {
 	}
 
 	return nil
+}
+
+var servises = map[service.ServiceID]service.Service{
+	service.SlackID:   &slack.Slack{},
+	service.TwitterID: &twitter.Twitter{},
+}
+
+//TODO 今回はどちらも必要なものが一つなので、stringを入れるようにする
+func (u *User) AddService(sid service.ServiceID, s string) {
+
+	c := Conf{
+		servises[sid].TokenKey(): s,
+	}
+
+	u.Service[sid] = c
 }
 
 func GetService(sid service.ServiceID) service.Service {

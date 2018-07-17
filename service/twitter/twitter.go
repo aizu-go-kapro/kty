@@ -7,6 +7,10 @@ import (
 	"github.com/dghubble/oauth1"
 )
 
+const (
+	TokenKey = "recipient"
+)
+
 type Twitter struct {
 	client *twitter.Client
 }
@@ -36,7 +40,7 @@ func New() *Twitter {
 func (t *Twitter) Send(token map[string]string, message string) error {
 
 	params := &twitter.DirectMessageNewParams{
-		ScreenName: token["recipient"],
+		ScreenName: token[TokenKey],
 		Text:       message,
 	}
 	_, _, err := t.client.DirectMessages.New(params)
@@ -46,4 +50,8 @@ func (t *Twitter) Send(token map[string]string, message string) error {
 
 func (t *Twitter)TypeID() string {
 	return "twitter"
+}
+
+func (t *Twitter)TokenKey() string {
+	return TokenKey
 }
