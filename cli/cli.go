@@ -42,11 +42,6 @@ func ReceiveArgs(args []string) []string {
 
 }
 
-type Options struct {
-	option1 string
-	args    []string
-}
-
 func OptionJudge(opt string, args []string) string {
 
 	var info string
