@@ -14,7 +14,13 @@ import (
 type Send struct{}
 
 func (s *Send) Help() string {
-	return "app foo"
+	return `
+	-u user name (must)
+	-m message (must)
+	-s service name
+	-all send all services
+	(you must select "-s" or "-all")
+`
 }
 
 func (s *Send) Run(args []string) int {
@@ -49,7 +55,7 @@ func (s *Send) Run(args []string) int {
 }
 
 func (s *Send) Synopsis() string {
-	return "Print \"Foo!\""
+	return "send message"
 }
 
 func (s *Send)ReceiveArgs(args []string) (map[string]string, error) {

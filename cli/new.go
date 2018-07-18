@@ -14,7 +14,13 @@ import (
 type NewUser struct{}
 
 func (n *NewUser) Help() string {
-	return "app foo"
+	return `
+	Register user information of recipient
+
+	user name
+	slack id (channel id)
+	twitter id (You do not have to turn on @)
+`
 }
 
 func (n *NewUser) Run(args []string) int {
@@ -35,7 +41,7 @@ func (n *NewUser) Run(args []string) int {
 }
 
 func (n *NewUser) Synopsis() string {
-	return "Print \"Foo!\""
+	return "create new user"
 }
 func StrStdin() (stringInput string) {
 	scanner := bufio.NewScanner(os.Stdin)
