@@ -52,6 +52,9 @@ func OptionJudge(opt string, args []string) string {
 		}
 
 		idx := GetIOptIndex(opt, args) + 1
+		if idx == -1 {
+			return ""
+		}
 
 		if opt == "-s" {
 			return args[idx]
