@@ -7,6 +7,8 @@ const (
 	TwitterID ServiceID = "twitter"
 )
 
+
+
 type Service interface {
 	Send(token map[string]string, message string)error
 	TypeID() string

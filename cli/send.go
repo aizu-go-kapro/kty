@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"os"
 	"github.com/pkg/errors"
+	"io/ioutil"
+	"encoding/json"
+	"github.com/aizu-go-kapro/kty/user"
+	"github.com/aizu-go-kapro/kty/service"
 )
 
 /** Send サブコマンド用の実装 **/
@@ -21,8 +25,15 @@ func (s *Send) Run(args []string) int {
 		return 1
 	}
 
-	for _, v := range info {
-		fmt.Println(v)
+	u, err := readUser(info["-u"])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		return 1
+	}
+
+	if err := u.Send(service.ServiceID(info["-s"]), info["-m"]); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		return 1
 	}
 
 	return 0
@@ -52,6 +63,21 @@ func (s *Send)ReceiveArgs(args []string) (map[string]string, error) {
 	opts["-s"] = OptionJudge("-s", args)
 
 	return opts, nil
+}
+func readUser(u string) (*user.User, error){
+	path := rootdr + ".kty/user/" + u + ".json"
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	 mu := user.NewUser(u)
+
+	if err := json.Unmarshal(data, mu); err != nil {
+		return nil, err
+	}
+
+	return mu, err
 }
 
 
