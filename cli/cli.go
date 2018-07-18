@@ -12,6 +12,14 @@ var (
 )
 
 func init(){
+	if os.Getenv("SLACK_TOKEN") == "" {
+		fmt.Println("SLACK_TOKEN not found")
+	}
+
+	if os.Getenv("TWITTER_CONSUMER_KEY") == "" {
+		fmt.Println("TWITTER_CONSUMER_KEY not found")
+	}
+	
 	rootdr = os.Getenv("HOME") + "/"
 	if err := createfunc(rootdr); err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
