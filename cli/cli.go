@@ -7,14 +7,14 @@ import (
 	"os"
 )
 
-/** kty サブコマンド用の実装 **/
-type Kty struct{}
+/** Send サブコマンド用の実装 **/
+type Send struct{}
 
-func (f *Kty) Help() string {
+func (f *Send) Help() string {
 	return "app foo"
 }
 
-func (f *Kty) Run(args []string) int {
+func (f *Send) Run(args []string) int {
 
 	info := ReceiveArgs(args)
 
@@ -26,7 +26,7 @@ func (f *Kty) Run(args []string) int {
 
 }
 
-func (f *Kty) Synopsis() string {
+func (f *Send) Synopsis() string {
 	return "Print \"Foo!\""
 }
 
@@ -94,7 +94,7 @@ func main() {
 	// サブコマンド文字列 と コマンド実装の対応付け
 	c.Commands = map[string]cli.CommandFactory{
 		"send": func() (cli.Command, error) {
-			return &Kty{}, nil
+			return &Send{}, nil
 		},
 	}
 
