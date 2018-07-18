@@ -10,6 +10,7 @@ import (
 
 const (
 	TokenKey = "slackChannelID"
+	ApiEndPoint = "https://slack.com/api/chat.postMessage"
 )
 
 type Message struct {
@@ -46,7 +47,7 @@ func (s *Slack) Send(token map[string]string, message string) error {
 	}
 
 	body := bytes.NewReader(m)
-	req, err := http.NewRequest("POST", "https://slack.com/api/chat.postMessage", body)
+	req, err := http.NewRequest(http.MethodPost, ApiEndPoint, body)
 	if err != nil {
 		return err
 	}
