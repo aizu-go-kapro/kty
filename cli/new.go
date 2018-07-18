@@ -26,11 +26,11 @@ func (n *NewUser) Run(args []string) int {
 		u.AddService(v, StrStdin())
 	}
 
-	fmt.Println(u)
 	if err := writeJson(rootdr, u); err != nil {
 		fmt.Fprint(os.Stderr, err.Error())
 		return 1
 	}
+	fmt.Println("New User: ", u.Name)
 	return 0
 }
 
