@@ -31,9 +31,18 @@ func (s *Send) Run(args []string) int {
 		return 1
 	}
 
-	if err := u.Send(service.ServiceID(info["-s"]), info["-m"]); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		return 1
+	if _, ok := info["-s"]; ok{
+		if err := u.Send(service.ServiceID(info["-s"]), info["-m"]); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return 1
+		}
+	}
+
+	if _, ok := info["-all"]; ok{
+		if err := u.SendAll(info["-m"]); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return 1
+		}
 	}
 
 	return 0
@@ -57,10 +66,17 @@ func (s *Send)ReceiveArgs(args []string) (map[string]string, error) {
 	}
 	opts["-m"] = OptionJudge("-m", args)
 
-	if !ExitOption("-s",args) {
+	if !ExitOption("-s",args) && !ExitOption("-all", args){
 		return nil, errors.New("service not found")
 	}
-	opts["-s"] = OptionJudge("-s", args)
+
+	if ExitOption("-s",args) {
+		opts["-s"] = OptionJudge("-s", args)
+	}
+
+	if ExitOption("-all",args) {
+		opts["-all"] = "all"
+	}
 
 	return opts, nil
 }
