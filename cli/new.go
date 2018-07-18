@@ -43,14 +43,15 @@ func (n *NewUser) Run(args []string) int {
 func (n *NewUser) Synopsis() string {
 	return "create new user"
 }
-func StrStdin() (stringInput string) {
+
+func StrStdin() string {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	scanner.Scan()
-	stringInput = scanner.Text()
+	stringInput := scanner.Text()
 
 	stringInput = strings.TrimSpace(stringInput)
-	return
+	return stringInput
 }
 
 
