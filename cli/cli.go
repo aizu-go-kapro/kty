@@ -16,8 +16,7 @@ func (f *Kty) Help() string {
 
 func (f *Kty) Run(args []string) int {
 
-
-	info := receive_args(args)
+	info := ReceiveArgs(args)
 
 	for _, v := range info {
 		fmt.Println(v)
@@ -31,64 +30,52 @@ func (f *Kty) Synopsis() string {
 	return "Print \"Foo!\""
 }
 
-func receive_args(arguments []string) []string {
+func ReceiveArgs(args []string) []string {
 
-	info := []string{}
+	info := make([]string, 0, len(args))
 
-	info = append(info, OptionJudge(Options{"-u", arguments}))
-	info = append(info, OptionJudge(Options{"-m", arguments}))
-	info = append(info, OptionJudge(Options{"-s", arguments}))
+	info = append(info, OptionJudge("-u", args))
+	info = append(info, OptionJudge("-m", args))
+	info = append(info, OptionJudge("-s", args))
 
 	return info
 
 }
 
-func remove(args []string, search string) []string {
-	result := []string{}
-	for _, v := range args {
-		if v != search {
-			result = append(result, v)
-		}
-	}
-	return result
-}
-
 type Options struct {
-	option1  string
-	argments []string
+	option1 string
+	args    []string
 }
 
-func OptionJudge(opt Options) string {
+func OptionJudge(opt string, args []string) string {
 
 	var info string
-	for i := range opt.argments {
-		if opt.option1 == opt.argments[i] {
 
-			idx := if_equal(Ifequal{opt.option1, opt.argments})+1
-			if opt.option1 == "-s" {
-				return opt.argments[idx]
-			} else {
-				for _, v := range opt.argments[idx:len(opt.argments)] {
-						if v[0] == '-' {
-							break
-						}
-						info += v + " "
-				}
-			}
-			return info[:len(info)-1]
+	for i := range args {
+		if opt != args[i] {
+			continue
 		}
+
+		idx := GetIOptIndex(opt, args) + 1
+
+		if opt == "-s" {
+			return args[idx]
+		}
+
+		for _, v := range args[idx:] {
+			if v[0] == '-' {
+				break
+			}
+			info += v + " "
+		}
+
 	}
-	return ""
+	return info[:len(info)-1]
 }
 
-type Ifequal struct {
-	option string
-	args   []string
-}
-
-func if_equal(ie Ifequal) int {
-	for i, v := range ie.args {
-		if v == ie.option {
+func GetIOptIndex(opt string, args []string) int {
+	for i, v := range args {
+		if v == opt {
 			return i
 		}
 	}
@@ -102,7 +89,7 @@ func main() {
 	// サブコマンドの引数を指定
 	c.Args = os.Args[1:]
 
-	/*receive_args(os.Args)*/
+	/*ReceiveArgs(os.Args)*/
 
 	// サブコマンド文字列 と コマンド実装の対応付け
 	c.Commands = map[string]cli.CommandFactory{
