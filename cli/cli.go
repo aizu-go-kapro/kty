@@ -1,83 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"github.com/mitchellh/cli"
 	"log"
 	"os"
+	"fmt"
 )
 
-/** Send サブコマンド用の実装 **/
-type Send struct{}
+var (
+	rootdr string
+)
 
-func (f *Send) Help() string {
-	return "app foo"
-}
-
-func (f *Send) Run(args []string) int {
-
-	info := ReceiveArgs(args)
-
-	for _, v := range info {
-		fmt.Println(v)
+func init(){
+	rootdr = os.Getenv("HOME") + "/"
+	if err := createfunc(rootdr); err != nil {
+		fmt.Fprintf(os.Stderr, err.Error())
+		os.Exit(1)
 	}
-
-	return 0
-
 }
 
-func (f *Send) Synopsis() string {
-	return "Print \"Foo!\""
-}
-
-func ReceiveArgs(args []string) []string {
-
-	info := make([]string, 0, len(args))
-
-	info = append(info, OptionJudge("-u", args))
-	info = append(info, OptionJudge("-m", args))
-	info = append(info, OptionJudge("-s", args))
-
-	return info
-
-}
-
-func OptionJudge(opt string, args []string) string {
-
-	var info string
-
-	for i := range args {
-		if opt != args[i] {
-			continue
-		}
-
-		idx := GetIOptIndex(opt, args) + 1
-		if idx == -1 {
-			return ""
-		}
-
-		if opt == "-s" {
-			return args[idx]
-		}
-
-		for _, v := range args[idx:] {
-			if v[0] == '-' {
-				break
-			}
-			info += v + " "
-		}
-
-	}
-	return info[:len(info)-1]
-}
-
-func GetIOptIndex(opt string, args []string) int {
-	for i, v := range args {
+func ExitOption(opt string, args []string) bool {
+	for _, v := range args {
 		if v == opt {
-			return i
+			return true
 		}
 	}
-	return -1
+	return false
 }
 
 func main() {
@@ -87,12 +35,13 @@ func main() {
 	// サブコマンドの引数を指定
 	c.Args = os.Args[1:]
 
-	/*ReceiveArgs(os.Args)*/
-
 	// サブコマンド文字列 と コマンド実装の対応付け
 	c.Commands = map[string]cli.CommandFactory{
 		"send": func() (cli.Command, error) {
 			return &Send{}, nil
+		},
+		"new": func()(cli.Command, error){
+			return &NewUser{}, nil
 		},
 	}
 

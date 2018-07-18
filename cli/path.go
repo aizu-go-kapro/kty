@@ -25,7 +25,6 @@ func createfunc(rootdr string) error {
 		}
 
 		writeMaster(rootdr, user.MasterUser{})
-		writeJson(rootdr, user.JsonUser{}, user.User{})
 
 	}
 	// 普通はnilを戻す
@@ -46,24 +45,24 @@ func writeMaster(rootdr string, data user.MasterUser) {
 	defer fout.Close()
 }
 
-func writeJson(rootdr string, data user.JsonUser, u user.User) {
-	u.Name = "daisuke"
-	path := rootdr + ".kty/user/" + u.Name + ".json"
+func writeJson(rootdr string, data *user.User) error {
+	path := rootdr + ".kty/user/" + data.Name + ".json"
 	fout, err := os.Create(path)
+	defer fout.Close()
+
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	outputJson, err := json.Marshal(&data)
+
+	outputJson, err := json.Marshal(data)
 	fout.Write([]byte(outputJson))
 	if err != nil {
-		panic(err)
+		return err
 	}
-	defer fout.Close()
+
+	return nil
 }
 
-func main() {
-	rootdr := os.Getenv("HOME") + "/"
-	if err := createfunc(rootdr); err != nil {
-		panic(err)
-	}
-}
+//
+//func main() {
+//}
