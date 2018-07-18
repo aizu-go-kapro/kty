@@ -10,8 +10,8 @@ import (
 )
 
 type User struct {
-	Name    string
-	Service map[service.ServiceID]Conf
+	Name    string                     `json:"name"`
+	Service map[service.ServiceID]Conf `json:"services"`
 }
 
 type MasterUser struct {
